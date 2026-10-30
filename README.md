@@ -52,6 +52,7 @@ GitHub Pages hosts the app's static files. API calls still go directly from the 
 ## Implementation notes
 
 - Uses `fetch`, `async/await`, `response.ok`, and `try/catch/finally` for requests and feedback.
+- Live demo of a client-side JavaScript application using a REST API.
 - Uses `textContent` for API data rather than inserting untrusted markup into the page.
 - Prevents empty or whitespace-only posts and disables buttons during pending requests.
 - Keeps the interface responsive and labels/status messages accessible.
