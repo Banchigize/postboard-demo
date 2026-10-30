@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lab 3 Post Board: GET and POST using JavaScript Fetch API.">
+  <title>Post Board | Lab 3 Demonstration</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="Post Board home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="7" fill="currentColor"/><path d="M11 13h10M11 18h10" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>
+        </span>
+        <span>post<span class="brand-accent">board</span></span>
+      </a>
+      <span class="header-tag"><span class="tag-dot"></span> NUST MISIS · LAB 03</span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-content">
+          <p class="eyebrow">CLIENT-SIDE SCRIPTS <span class="eyebrow-divider">/</span> MODULE 3</p>
+          <h1 id="page-title">Build, connect, <span>create.</span></h1>
+          <p class="hero-description">A simple web application that talks to a REST API. Load posts, create a post, and see what happens when requests succeed or fail.</p>
+          <div class="hero-chips" aria-label="Concepts practiced">
+            <span>JavaScript</span><span>Fetch API</span><span>async / await</span><span>JSON</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="flow-node"><span class="flow-icon">↗</span><small>REQUEST</small><strong>GET /posts</strong></div>
+          <div class="flow-line"><span>→</span></div>
+          <div class="flow-node second"><span class="flow-icon">{ }</span><small>RESPONSE</small><strong>JSON data</strong></div>
+          <div class="flow-footnote">Browser <span>↔</span> API server</div>
+        </div>
+      </section>
+
+      <div class="api-strip">
+        <div class="api-strip-left"><span class="api-icon">↔</span><span>API SERVICE</span><strong>JSONPlaceholder</strong></div>
+        <a href="https://jsonplaceholder.typicode.com" target="_blank" rel="noopener noreferrer">View API documentation <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div class="workspace">
+        <section class="panel posts-panel" aria-labelledby="posts-heading">
+          <div class="panel-heading">
+            <div>
+              <p class="section-label"><span class="step-number">01</span> GET REQUEST</p>
+              <h2 id="posts-heading">Explore posts <span class="count-pill" id="post-count">0</span></h2>
+              <p class="panel-description">Fetch five posts from the API and display them here.</p>
+            </div>
+            <button type="button" class="button button-primary" id="load-posts-btn">
+              <svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span id="load-btn-label">Load posts</span>
+            </button>
+          </div>
+
+          <div class="notice notice-info" id="get-status" role="status" aria-live="polite">
+            <span class="notice-symbol" id="get-status-icon" aria-hidden="true">i</span>
+            <span id="get-status-text">Ready to connect. Click “Load posts” to begin.</span>
+          </div>
+
+          <div class="empty-state" id="empty-state">
+            <div class="empty-art" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>Nothing here yet</h3>
+            <p>Click <strong>Load posts</strong> to request data from the server.</p>
+          </div>
+
+          <div class="posts-grid" id="posts-list" aria-live="polite" aria-busy="false"></div>
+        </section>
+
+        <section class="panel composer-panel" aria-labelledby="composer-heading">
+          <div class="composer-top">
+            <p class="section-label"><span class="step-number mint">02</span> POST REQUEST</p>
+            <h2 id="composer-heading">Create a post</h2>
+            <p class="panel-description">Send a title and message as JSON. The server returns a simulated new post.</p>
+          </div>
+
+          <form id="create-post-form" novalidate>
+            <div class="form-row">
+              <label for="post-title">Post title <span class="required">*</span></label>
+              <input id="post-title" name="title" type="text" placeholder="e.g. My first REST API request" maxlength="100" autocomplete="off" aria-describedby="title-error">
+              <small class="field-error" id="title-error" hidden></small>
+            </div>
+            <div class="form-row">
+              <label for="post-body">Post content <span class="required">*</span></label>
+              <textarea id="post-body" name="body" rows="6" maxlength="500" placeholder="Write a short message to send to the API..." aria-describedby="body-error"></textarea>
+              <small class="field-error" id="body-error" hidden></small>
+            </div>
+            <button class="button button-submit" id="create-post-btn" type="submit">
+              <span id="create-btn-label">Create post</span>
+              <svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </form>
+
+          <div class="notice notice-info post-status" id="post-status" role="status" aria-live="polite" hidden>
+            <span class="notice-symbol" id="post-status-icon" aria-hidden="true">i</span>
+            <span id="post-status-text"></span>
+          </div>
+
+          <div class="created-preview" id="created-preview" hidden>
+            <div class="preview-heading"><span class="preview-check">✓</span><strong>Response received</strong><span id="created-id" class="response-id"></span></div>
+            <p class="preview-overline">CREATED TITLE</p>
+            <h3 id="created-title"></h3>
+            <p class="preview-body" id="created-body"></p>
+          </div>
+
+          <p class="simulation-note"><span aria-hidden="true">ⓘ</span> This is a test API. New posts are <strong>not permanently saved</strong>.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer"><span>NUST MISIS · Client-Side Scripts · Laboratory Work 3</span><span>HTML + CSS + Vanilla JavaScript</span></footer>
+  </div>
+</body>
+</html>
